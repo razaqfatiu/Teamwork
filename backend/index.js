@@ -24,6 +24,8 @@ app.use((req, res, next) => {
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 app.use('/api/v1/admin', adminRoute);
 app.use('/api/v1/employee', employeeRoute);

@@ -1,8 +1,13 @@
+// const { pool } = require('../db/config')
 const express = require('express');
-const { getAdmins } = require('../controllers/admin');
+const { getAdmin, adminSignin } = require('../controllers/admin');
+// const adminSignin = require('../controllers/admin');
+const { adminAuth } = require('../middleware/adminAuth');
 
 const adminRouter = express.Router();
 
-adminRouter.get('/', getAdmins);
+adminRouter.get('/', adminAuth, getAdmin);
+adminRouter.post('/auth/signin', adminSignin);
+
 
 module.exports = adminRouter;
