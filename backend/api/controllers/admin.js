@@ -16,13 +16,15 @@ module.exports = {
     };
 
     return pool.query(query).then((admin) => {
-      if (!admin) {
+      const { rows } = admin;
+      if (rows.length === 0) {
         return res.status(401).json({
           error: new Error('Admin not found'),
         });
       }
-      const { rows } = admin;
-      return bcrypt.compare(password, rows[0].password)
+      bcrypt.compare(password, rows[0].password)
+        // eslint-disable-next-line consistent-return
+
         .then((valid) => {
           if (!valid) {
             return res.status(401).json({
