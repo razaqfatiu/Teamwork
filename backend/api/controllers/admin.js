@@ -17,12 +17,12 @@ module.exports = {
 
     // eslint-disable-next-line consistent-return
     return pool.query(query).then((admin) => {
-      if (!admin) {
+      const { rows } = admin;
+      if (rows.length === 0) {
         return res.status(401).json({
           error: new Error('Admin not found'),
         });
       }
-      const { rows } = admin;
       bcrypt.compare(password, rows[0].password)
         // eslint-disable-next-line consistent-return
         .then((valid) => {
