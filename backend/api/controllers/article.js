@@ -43,6 +43,11 @@ module.exports = {
           title: rows[0].title,
           article: rows[0].article,
         });
+      })
+      .catch((error) => {
+        res.status(500).json({
+          error,
+        });
       });
   },
 };
