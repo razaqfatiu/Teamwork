@@ -9,7 +9,6 @@ exports.adminAuth = (req, res, next) => {
     if (req.body.adminId && req.body.adminId !== adminId) {
       // eslint-disable-next-line no-throw-literal
       throw 'Invalid user id';
-
     } else {
       next();
     }
