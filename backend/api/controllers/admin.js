@@ -22,9 +22,7 @@ module.exports = {
           error: new Error('Admin not found'),
         });
       }
-      bcrypt.compare(password, rows[0].password)
-        // eslint-disable-next-line consistent-return
-
+      return bcrypt.compare(password, rows[0].password)
         .then((valid) => {
           if (!valid) {
             return res.status(401).json({
