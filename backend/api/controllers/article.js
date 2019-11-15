@@ -25,4 +25,24 @@ module.exports = {
         res.status(500).json({ error });
       });
   },
+
+  editArticle(req, res) {
+    const { title, article } = req.body;
+    const { id } = req.params;
+
+    const updateArticle = {
+      name: 'updateArticle',
+      text: 'UPDATE article SET title = $1, article = $2 WHERE id=$3 RETURNING *',
+      values: [title, article, id],
+    };
+    pool.query(updateArticle)
+      .then((response) => {
+        const { rows } = response;
+        res.status(201).json({
+          message: 'Article successfully updated',
+          title: rows[0].title,
+          article: rows[0].article,
+        });
+      });
+  },
 };
