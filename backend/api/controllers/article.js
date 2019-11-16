@@ -22,7 +22,7 @@ module.exports = {
     })
       .catch((error) => {
         console.log(error);
-        res.status(500).json({ error });
+        res.status(400).json({ error });
       });
   },
 
@@ -45,9 +45,21 @@ module.exports = {
         });
       })
       .catch((error) => {
-        res.status(500).json({
+        res.status(400).json({
           error,
         });
       });
+  },
+  deleteArticle(req, res) {
+    const { id } = req.params;
+    const deleteArticle = {
+      name: 'deleteArticle',
+      text: 'DELETE FROM article WHERE id = $1',
+      values: [id],
+    };
+    pool.query(deleteArticle).then(() => {
+      res.status(200).json({ message: 'Article Successfully deleted' });
+    })
+      .catch((error) => { res.status(400).json({ error }); });
   },
 };
