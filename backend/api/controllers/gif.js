@@ -20,8 +20,8 @@ module.exports = {
         }
         const insertGif = {
           name: 'insertGif',
-          text: 'INSERT INTO gif (name, title, imageurl, employeeid) VALUES ($1, $2, $3, $4) RETURNING *',
-          values: [result.original_filename, title, result.url, employeeid],
+          text: 'INSERT INTO gif (name, title, imageurl, public_id, employeeid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+          values: [result.original_filename, title, result.url, result.public_id, employeeid],
         };
         return pool.query(insertGif).then((response) => {
           const { rows } = response;
