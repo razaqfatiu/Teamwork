@@ -21,7 +21,6 @@ module.exports = {
       };
 
       pool.query(selectArticle).then((articleResponse) => {
-        console.log(articleResponse);
         res.status(201).json({
           message: 'comment successfully created',
           createdOn: rows[0].created_at,
