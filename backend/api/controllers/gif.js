@@ -39,4 +39,52 @@ module.exports = {
           });
       });
   },
+  deleteGif(req, res) {
+    const { id } = req.params;
+    const signedInEmployee = req.employee.id;
+    let uploader;
+    let publicId;
+
+    const getGifInfo = {
+      name: 'getGifInfo',
+      text: 'SELECT name,employeeid,public_id FROM gif WHERE id=$1',
+      values: [id],
+    };
+    pool.query(getGifInfo).then((result) => result).then((data) => {
+      const { rows } = data;
+      publicId = rows[0].public_id;
+      uploader = rows[0].employeeid;
+
+      if (uploader !== signedInEmployee) {
+        return res.status(401).json({
+          message: 'You are not authorized to delete this file',
+        });
+      }
+      const removeGif = {
+        name: 'removeGif',
+        text: 'DELETE FROM gif WHERE id = $1',
+        values: [id],
+      };
+      return cloudinary.uploader.destroy(publicId,
+        {
+          folder: 'samples/gifs',
+        },
+        (err) => {
+          if (err) {
+            return res.status(400).json({
+              err,
+            });
+          }
+          return pool.query(removeGif).then(() => res.status(200).json({
+            message: 'gif post successfully deleted',
+          }))
+            .catch((error) => {
+              res.status(400).json({ error });
+            });
+        });
+    })
+      .catch((error) => {
+        res.status(400).json({ error });
+      });
+  },
 };
