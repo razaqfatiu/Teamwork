@@ -5,7 +5,7 @@ const {
 } = require('../controllers/article');
 const { createComment, createGifComment } = require('../controllers/comment');
 const { employeeAuth } = require('../middleware/employeeAuth');
-const { createGif, deleteGif } = require('../controllers/gif');
+const { createGif, deleteGif, getOneGif } = require('../controllers/gif');
 const multer = require('../config/multerConfig');
 
 const employeeRouter = express.Router();
@@ -23,5 +23,6 @@ employeeRouter.delete('/gifs/:id', employeeAuth, deleteGif);
 employeeRouter.post('/gifs/:gifId/comment', employeeAuth, createGifComment);
 
 employeeRouter.get('/articles/:articleId', employeeAuth, getOneArticle);
+employeeRouter.get('/gifs/:gifId', employeeAuth, getOneGif);
 
 module.exports = employeeRouter;
