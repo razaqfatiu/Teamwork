@@ -79,7 +79,7 @@ module.exports = {
       res.status(200).json({
         id: rows[0].id,
         createdOn: rows[0].created_at,
-        title: rows[0].id,
+        title: rows[0].title,
         article: rows[0].article,
         comments: response.rows,
       });

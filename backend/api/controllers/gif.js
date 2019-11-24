@@ -25,7 +25,8 @@ module.exports = {
         };
         return pool.query(insertGif).then((response) => {
           const { rows } = response;
-          res.json({
+          res.status(201).json({
+            gifId: rows[0].id,
             message: 'GIF image successfully posted',
             createdOn: rows[0].created_at,
             title: rows[0].title,
@@ -106,7 +107,7 @@ module.exports = {
         id: rows[0].id,
         createdOn: rows[0].created_at,
         title: rows[0].title,
-        url: rows[0].imageUrl,
+        url: rows[0].imageurl,
         comments: response.rows,
       });
     })

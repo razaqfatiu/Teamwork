@@ -26,6 +26,6 @@ employeeRouter.post('/gifs/:gifId/comment', employeeAuth, createGifComment);
 employeeRouter.get('/articles/:articleId', employeeAuth, getOneArticle);
 employeeRouter.get('/gifs/:gifId', employeeAuth, getOneGif);
 
-employeeRouter.get('/feeds', employeeAuth, getFeeds);
+employeeRouter.get('/feed', employeeAuth, getFeeds);
 
 module.exports = employeeRouter;
