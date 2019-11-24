@@ -4,7 +4,7 @@
   "description": "Capstone Project",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha ./test/gif.spec.js --exit",
+    "test": "node_modules/mocha/bin/mocha ./test/**/*.js --exit",
     "start": "nodemon index.js"
   },
   "repository": {
