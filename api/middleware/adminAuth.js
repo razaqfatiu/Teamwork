@@ -14,7 +14,7 @@ exports.adminAuth = (req, res, next) => {
     }
   } catch (error) {
     res.status(401).json({
-      error: new Error('Invaid request'),
+      error: 'Invaid request',
     });
   }
 };

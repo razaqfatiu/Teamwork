@@ -19,14 +19,14 @@ module.exports = {
       const { rows } = admin;
       if (rows.length === 0) {
         return res.status(401).json({
-          error: new Error('Admin not found'),
+          error: 'Admin not found',
         });
       }
       return bcrypt.compare(password, rows[0].password)
         .then((valid) => {
           if (!valid) {
             return res.status(401).json({
-              error: new Error('Incorrect email or password'),
+              error: 'Incorrect email or password',
             });
           }
           const token = jwt.sign(
@@ -66,7 +66,7 @@ module.exports = {
       const { rows } = result;
       if (rows.length > 0) {
         return res.status(400).json({
-          error: new Error('Employee has an existing account'),
+          error: 'Employee has an existing account',
         });
       }
       return bcrypt.hash(password, 10).then((hash) => {
@@ -79,7 +79,6 @@ module.exports = {
         };
         pool.query(insertNewEmployee)
           .then((response) => {
-            console.log(response);
             res.status(201).json({
               message: 'Employee added successfully!!!',
               token,
@@ -87,13 +86,11 @@ module.exports = {
             });
           })
           .catch((error) => {
-            console.log(error);
             res.status(500).json({ error });
           });
       });
     })
       .catch((error) => {
-        console.log(error);
         res.status(500).json({ error });
       });
   },

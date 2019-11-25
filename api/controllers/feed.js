@@ -11,6 +11,6 @@ module.exports = {
     pool.query(getFeed).then((result) => {
       res.json({ result });
     })
-      .catch((error) => { console.log(error); res.status(400).json({ error }); });
+      .catch((error) => { res.status(400).json({ error }); });
   },
 };

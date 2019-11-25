@@ -21,14 +21,14 @@ module.exports = {
       const { rows } = employee;
       if (rows.length === 0) {
         return res.status(401).json({
-          error: new Error('Employee not found'),
+          error: 'Employee not found',
         });
       }
       return bcrypt.compare(password, rows[0].password)
         .then((valid) => {
           if (!valid) {
             return res.status(401).json({
-              error: new Error('Incorrect email or password'),
+              error: 'Incorrect email or password',
             });
           }
           const token = jwt.sign(

@@ -1,7 +1,5 @@
-// const { pool } = require('../db/config')
 const express = require('express');
 const { getAdmin, adminSignin, adminCreateUser } = require('../controllers/admin');
-// const adminSignin = require('../controllers/admin');
 const { adminAuth } = require('../middleware/adminAuth');
 
 const adminRouter = express.Router();
