@@ -6,6 +6,7 @@ exports.adminAuth = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decoedToken = jwt.verify(token, process.env.TOKEN_SECRET);
     const { adminId } = decoedToken;
+    req.admin = { id: adminId, token };
     if (req.body.adminId && req.body.adminId !== adminId) {
       // eslint-disable-next-line no-throw-literal
       throw 'Invalid user id';
