@@ -78,7 +78,7 @@ module.exports = {
           values: [firstname, lastname, email, hash, gender, jobrole, department, address, adminId],
         };
         pool.query(insertNewEmployee)
-          .then((response) => {
+          .then(() => {
             res.status(201).json({
               message: 'Employee added successfully!!!',
               token,
