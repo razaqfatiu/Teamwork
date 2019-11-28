@@ -55,9 +55,9 @@ module.exports = {
     pool.query(getGifInfo).then((data) => {
       const { rows } = data;
       const publicId = rows[0].public_id;
-      const uploader = rows[0].employeeid;
+      const author = rows[0].author_id;
 
-      if (!isAdmin && uploader !== signedInUser) {
+      if (!isAdmin && author !== signedInUser) {
         return res.status(401).json({
           message: 'You are not authorized to delete this file',
         });
