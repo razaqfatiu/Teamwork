@@ -112,10 +112,9 @@ module.exports = {
   //   const selectComment = {
   //     name: 'selectComment',
   //     text: `SELECT id as "commentId", comment,
-  // employeeid as "authorId" FROM comment WHERE articleid=$1`,
+  //             employeeid as "authorId" FROM comment WHERE articleid=$1`,
   //     values: [articleId],
   //   };
-
   //   pool.query(selectComment).then((response) => pool.query(selectArticle).then((result) => {
   //     const { rows } = result;
   //     res.status(200).json({
