@@ -38,7 +38,11 @@ module.exports = {
     pool.query(getArticleInfo).then((data) => {
       const { rows } = data;
       const author = rows[0].author_id;
-
+      if (rows.length === 0) {
+        return res.status(404).json({
+          error: 'Cannot find Article',
+        });
+      }
       if (!isAdmin && author !== signedInUser) {
         return res.status(401).json({
           message: 'You are not authorized to edit this article',

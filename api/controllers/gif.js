@@ -56,7 +56,11 @@ module.exports = {
       const { rows } = data;
       const publicId = rows[0].public_id;
       const author = rows[0].author_id;
-
+      if (rows.length === 0) {
+        return res.status(404).json({
+          error: 'Cannot find Gif Image',
+        });
+      }
       if (!isAdmin && author !== signedInUser) {
         return res.status(401).json({
           message: 'You are not authorized to delete this file',
