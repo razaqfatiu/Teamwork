@@ -70,18 +70,38 @@ module.exports = {
         });
       });
   },
-  // deleteArticle(req, res) {
-  //   const { id } = req.params;
-  //   const deleteArticle = {
-  //     name: 'deleteArticle',
-  //     text: 'DELETE FROM article WHERE id = $1',
-  //     values: [id],
-  //   };
-  //   pool.query(deleteArticle).then(() => {
-  //     res.status(200).json({ message: 'Article Successfully deleted' });
-  //   })
-  //     .catch((error) => { res.status(400).json({ error }); });
-  // },
+  deleteArticle(req, res) {
+    const { articleId } = req.params;
+    const { isAdmin, id: signedInUser } = req.user;
+    const getArticleInfo = {
+      name: 'getArticleInfo',
+      text: 'SELECT author_id FROM article WHERE id=$1',
+      values: [articleId],
+    };
+
+    pool.query(getArticleInfo).then((data) => {
+      const { rows } = data;
+      const author = rows[0].author_id;
+
+      if (!isAdmin && author !== signedInUser) {
+        return res.status(401).json({
+          message: 'You are not authorized to delete this article',
+        });
+      }
+      const deleteArticle = {
+        name: 'deleteArticle',
+        text: 'DELETE FROM article WHERE id = $1',
+        values: [articleId],
+      };
+      return pool.query(deleteArticle).then(() => {
+        res.status(200).json({ message: 'Article Successfully deleted' });
+      })
+        .catch((error) => {
+          res.status(400).json({ error });
+        });
+    })
+      .catch((error) => { res.status(400).json({ error }); });
+  },
   // getOneArticle(req, res) {
   //   const { articleId } = req.params;
   //   const selectArticle = {
