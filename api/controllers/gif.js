@@ -89,31 +89,4 @@ module.exports = {
         res.status(400).json({ error });
       });
   },
-  // getOneGif(req, res) {
-  //   const { gifId } = req.params;
-  //   const selectGif = {
-  //     name: 'selectGif',
-  //     text: 'SELECT * FROM gif WHERE id=$1',
-  //     values: [gifId],
-  //   };
-  //   const selectGifComment = {
-  //     name: 'selectGifComment',
-  // eslint-disable-next-line max-len
-  //     text: 'SELECT id as "commentId", comment, employeeid as "authorId" FROM gif_comment WHERE gif_id=$1',
-  //     values: [gifId],
-  //   };
-
-  //   pool.query(selectGifComment).then((response) => pool.query(selectGif).then((result) => {
-  //     const { rows } = result;
-  //     res.status(200).json({
-  //       id: rows[0].id,
-  //       createdOn: rows[0].created_at,
-  //       title: rows[0].title,
-  //       url: rows[0].imageurl,
-  //       comments: response.rows,
-  //     });
-  //   })
-  //     .catch((error) => res.status(400).json({ error })))
-  //     .catch((error) => res.status(400).json({ error }));
-  // },
 };
