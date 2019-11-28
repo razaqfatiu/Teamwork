@@ -6,7 +6,9 @@ const {
 } = require('../controllers/article');
 const { createGif, deleteGif } = require('../controllers/gif');
 const { createArticleComment, createGifComment } = require('../controllers/comment');
+const { getFeeds } = require('../controllers/feed');
 const multer = require('../config/multerConfig');
+
 
 const userRouter = express.Router();
 
@@ -20,6 +22,7 @@ userRouter.delete('/gifs/:gifId', userAuth, deleteGif);
 userRouter.post('/articles/:articleId/comment', userAuth, createArticleComment);
 userRouter.post('/gifs/:gifId/comment', userAuth, createGifComment);
 userRouter.get('/articles/:articleId', userAuth, getOneArticle);
+userRouter.get('/feed', userAuth, getFeeds);
 
 
 module.exports = userRouter;
