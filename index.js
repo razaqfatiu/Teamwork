@@ -8,8 +8,8 @@ const app = express();
 const PORT = process.env.PORT;
 
 const { pool } = require('./api/db/config');
-const userRoute = require('./api/routes/user');
-// const employeeRoute = require('./api/routes/employee');
+const adminRoute = require('./api/routes/admin');
+const employeeRoute = require('./api/routes/employee');
 
 pool.connect().then(() => console.log('Db connected successfully !!!'))
   .catch((err) => { console.log(`error ${err}`); });
@@ -27,8 +27,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
-app.use('/api/v1', userRoute);
-// app.use('/api/v1', employeeRoute);
+app.use('/api/v1/admin', adminRoute);
+app.use('/api/v1/employee', employeeRoute);
 
 app.listen(PORT || 3000, () => {
   console.log(`server running on port ${PORT}`);
