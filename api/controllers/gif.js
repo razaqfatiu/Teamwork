@@ -5,7 +5,8 @@ module.exports = {
   createGif(req, res) {
     const gif = req.file.path;
     const { title } = req.body;
-    const employeeid = req.employee.id;
+    const userId = req.user.id;
+    console.log(userId);
     cloudinary.uploader.upload(gif,
       {
         use_filename: true,
@@ -21,7 +22,7 @@ module.exports = {
         const insertGif = {
           name: 'insertGif',
           text: 'INSERT INTO gif (name, title, imageurl, public_id, employeeid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-          values: [result.original_filename, title, result.url, result.public_id, employeeid],
+          values: [result.original_filename, title, result.url, result.public_id, userId],
         };
         return pool.query(insertGif).then((response) => {
           const { rows } = response;
