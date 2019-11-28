@@ -37,4 +37,39 @@ module.exports = {
         res.status(400).json({ error });
       });
   },
+  createGifComment(req, res) {
+    const { comment } = req.body;
+    const { gifId } = req.params;
+    const { id: userId } = req.user;
+    const insertComment = {
+      name: 'insertComment',
+      text: 'INSERT INTO gif_comment (comment, gif_id, author_id) VALUES ($1, $2, $3) RETURNING *',
+      values: [comment, gifId, userId],
+    };
+
+    pool.query(insertComment).then((response) => {
+      const { rows } = response;
+      const selectGif = {
+        name: 'selectGif',
+        text: 'SELECT * FROM gif WHERE id=$1',
+        values: [rows[0].gif_id],
+      };
+
+      pool.query(selectGif).then((gifResponse) => {
+        const createdOn = new Date(rows[0].created_at);
+        res.status(201).json({
+          message: 'comment successfully created',
+          createdOn,
+          gifTitle: gifResponse.rows[0].title,
+          comment: rows[0].comment,
+        });
+      })
+        .catch((error) => {
+          res.status(400).json({ error });
+        });
+    })
+      .catch((error) => {
+        res.status(400).json({ error });
+      });
+  },
 };
