@@ -6,19 +6,7 @@ const { pool } = require('../db/config');
 
 
 module.exports = {
-  createAdmin(req, res) {
-    const {
-      firstname, lastname, email, password, gender, jobrole, department, address,
-    } = req.body;
-    bcrypt.hash(password, 10).then((hash) => {
-      const query = {
-        text: 'INSERT INTO users (firstname, lastname, email, password, gender, jobrole, department, address, isadmin) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-        values: [firstname, lastname, email, hash, gender, jobrole, department, address, true],
-      };
-      // eslint-disable-next-line max-len
-      pool.query(query).then((resp) => res.status(201).json({ resp })).catch((err) => console.log(err));
-    });
-  },
+
   userSignIn(req, res) {
     const { email, password } = req.body;
     const query = {
