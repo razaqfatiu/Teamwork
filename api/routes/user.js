@@ -1,7 +1,9 @@
 const express = require('express');
 const { userSignIn, adminCreateUser } = require('../controllers/user');
 const { userAuth } = require('../middleware/userAuth');
-const { createArticle, editArticle, deleteArticle } = require('../controllers/article');
+const {
+  createArticle, editArticle, deleteArticle, getOneArticle,
+} = require('../controllers/article');
 const { createGif, deleteGif } = require('../controllers/gif');
 const { createArticleComment, createGifComment } = require('../controllers/comment');
 const multer = require('../config/multerConfig');
@@ -17,6 +19,7 @@ userRouter.post('/gifs', userAuth, multer, createGif);
 userRouter.delete('/gifs/:gifId', userAuth, deleteGif);
 userRouter.post('/articles/:articleId/comment', userAuth, createArticleComment);
 userRouter.post('/gifs/:gifId/comment', userAuth, createGifComment);
+userRouter.get('/articles/:articleId', userAuth, getOneArticle);
 
 
 module.exports = userRouter;
