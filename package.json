@@ -4,7 +4,7 @@
   "description": "Capstone Project",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha ./test/**/*.js --exit",
+    "test": "node_modules/mocha/bin/mocha ./test/gif.spec.js --exit",
     "lint": "./node_modules/eslint/bin/eslint.js '**/*.js'",
     "start": "nodemon index.js",
     "coveralls": "./node_modules/.bin/mocha test -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
@@ -26,7 +26,8 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.2.2",
-    "mocha-lcov-reporter": "^1.3.0"
+    "mocha-lcov-reporter": "^1.3.0",
+    "nock": "^11.7.0"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
