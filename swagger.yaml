@@ -4,9 +4,9 @@ info:
   description: Teamwork Mock-up API
   version: 1.0
 servers:
-  - url: https://capstone-teamwork-node-api.herokuapp.com/
+  - url: https://capstone-teamwork-node-api.herokuapp.com/api/v1
     description: Main (production) server
-  - url: http://localhost:5000/
+  - url: http://localhost:5000/api/v1
     description: Dev environment
 paths:
   /auth/create-user:
@@ -68,7 +68,7 @@ paths:
             description: User account exists.
           "404":
             description: Could not find logged in Admin.
-  auth/signin:
+  /auth/signin:
     post:
       tags:
         - Users
