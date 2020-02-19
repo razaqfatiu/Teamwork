@@ -1,0 +1,455 @@
+openapi: 3.0.0
+info:
+  title: Teamwork API
+  description: Teamwork Mock-up API
+  version: 1.0
+servers:
+  - url: https://capstone-teamwork-node-api.herokuapp.com/
+    description: Main (production) server
+  - url: http://localhost:5000/
+    description: Dev environment
+paths:
+  /auth/create-user:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      summary: Register user account.
+      description: Sign up user account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                gender:
+                  type: string
+                jobrole:
+                  type: string
+                department:
+                  type: string
+                address:
+                  type: string
+      responses:
+        "201": # status code
+          description: User Account created Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                gender:
+                  type: string
+                jobrole:
+                  type: string
+                department:
+                  type: string
+                address:
+                  type: string
+          "400":
+            description: User account exists.
+          "404":
+            description: Could not find logged in Admin.
+  auth/signin:
+    post:
+      tags:
+        - Users
+      summary: sign in user account.
+      description: user/admin account sign in.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200": # status code
+          description: User signed in Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                  token:
+                    type: string
+          "400":
+            description: User account not found.
+          "401":
+            description: Invalid credentials.
+  /gifs:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Gif
+      summary: Post Gif.
+      description: Users Post gif mages.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                image:
+                  in: "formData"
+                  description: "file to upload"
+                  required: true
+                  type: "file"
+      responses:
+        "201": # status code
+          description: Admin Posted a product Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gifId:
+                    type: integer
+                  message:
+                    type: string
+                  createdOn:
+                    type: string
+                  title:
+                    type: string
+                  imageUrl:
+                    type: string
+          "500":
+            description: Server Error.
+  /gifs/{gifId}:  
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Gif
+      summary: get uploaded Gif Image.
+      parameters:
+        - in: path
+          name: gifId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the gif image to get
+      description: get Uploaded gif Image.
+      responses:
+        "200": # status code
+          description: Gotten Gif image Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  createdOn:
+                    type: string
+                  title:
+                    type: string
+                  url:
+                    type: string
+                  comments:
+                    type: string
+      "400":
+        description: Bad request.
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Gif
+      summary: Delete uploaded Gif Image.
+      parameters:
+        - in: path
+          name: gifId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the gif image to delete
+      description: Delete Uploaded gif Image.
+      responses:
+        "200": # status code
+          description: Deleted gif image Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      "404":
+        description: Image not found.
+      "401":
+        description: Unauthorized to delete this gif.
+  /articles/{articleId}:
+    patch:
+      security:
+        - bearerAuth: []
+      tags:
+        - Article
+      summary: Update Article
+      description: Admin and authorized users can update articles.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                article:
+                  type: string
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Article
+      summary: Delete Article
+      parameters:
+        - in: path
+          name: articleId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the article to be deleted
+      description: Admin and authorized users can delete articles.
+      responses:
+        "201": # status code
+          description: Admins and auth users Updated an article Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+          "401":
+            description: Only Admins and authorized users can delete article.
+          "404":
+            description: Article not found
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Article
+      summary: get uploaded article.
+      parameters:
+        - in: path
+          name: articleId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the article to get
+      description: get Uploaded article.
+      responses:
+        "200": # status code
+          description: Gotten article Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  createdOn:
+                    type: string
+                  title:
+                    type: string
+                  article:
+                    type: string
+                  comments:
+                    type: string
+      "400":
+        description: Bad request.
+  /articles:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Article
+      summary: Post article.
+      description: create new article.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                article:
+                  type: string
+      responses:
+        "201": # status code
+          description: Admin Updated a product Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  articleId:
+                    type: integer
+                  createdOn:
+                    type: string
+                  title:
+                    type: string
+          "400":
+            description: Bad request.
+
+   
+  /articles/{articleId}/comment:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Comments
+      summary: Post item.
+      parameters:
+        - in: path
+          name: articleId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the article to comment on
+      description: Add Products to cart.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+      responses:
+        "201": # status code
+          description: Comment created Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  createdOn:
+                    type: string
+                  articleTitle:
+                    type: string
+                  article:
+                    type: string
+                  comment:
+                    type: string
+          "404":
+            description: Bad request.
+  /gifs/{gifId}/comment:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Comments
+      summary: Post comment on uploaded gif.
+      parameters:
+        - in: path
+          name: gifId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the gif to comment on
+      description: Add comment to gif image.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+      responses:
+        "201": # status code
+          description: Comment created Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  createdOn:
+                    type: string
+                  gifTitle:
+                    type: string
+                  comment:
+                    type: string
+          "404":
+            description: Bad request.
+  /feeds:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Feeds
+      summary: get all feeds.
+      description: get all uploaded article and gif images detail.
+      responses:
+        "200": # status code
+          description: User signed in Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        cartId:
+                          type: integer
+                        productId:
+                          type: integer
+                        userId:
+                          type: integer
+                        createdAt:
+                          type: string
+                        updatedAt:
+                          type: string
+      "404":
+        description: Bad request.
+components:
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
