@@ -1,12 +1,37 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const { body, validationResult } = require('express-validator');
 const { pool } = require('../db/config');
 
 
 module.exports = {
-
+  userInputValidation: [
+    body('firstname', 'Firstname field cannot be empty').trim()
+      .not().isEmpty(),
+    body('lastname', 'Last Namefield cannot be empty').trim()
+      .not()
+      .isEmpty(),
+    body('email', 'Enter a valid email').isEmail().trim()
+      .not()
+      .isEmpty(),
+    body('password', 'Password cannot be empty and requires at least 6 character')
+      .isLength({ min: 3 }).trim()
+      .not()
+      .isEmpty(),
+    body('gender', 'gender field cannot be empty').trim()
+      .not()
+      .isEmpty(),
+    body('jobrole', 'jobrole field cannot be empty').trim()
+      .not()
+      .isEmpty(),
+    body('department', 'department field cannot be empty').trim()
+      .not()
+      .isEmpty(),
+    body('address', 'address field cannot be empty').trim()
+      .not()
+      .isEmpty(),
+  ],
   userSignIn(req, res) {
     const { email, password } = req.body;
     const query = {
@@ -62,7 +87,12 @@ module.exports = {
         });
       });
   },
+  // eslint-disable-next-line consistent-return
   adminCreateUser(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
     const {
       firstname, lastname, email, password, gender, jobrole, department, address,
     } = req.body;
@@ -94,20 +124,14 @@ module.exports = {
           values: [firstname, lastname, email, hash, gender, jobrole, department, address, false],
         };
         pool.query(insertNewEmployee)
-          .then(() => {
-            res.status(201).json({
-              message: 'User Account successfully created',
-              userId,
-            });
-          })
-          .catch((error) => {
-            res.status(500).json({ error });
-          });
+          .then(() => res.status(201).json({
+            message: 'User Account successfully created',
+            userId,
+          }))
+          .catch((error) => res.status(500).json({ error }));
       });
     })
-      .catch((error) => {
-        res.status(500).json({ error });
-      });
+      .catch((error) => res.status(500).json({ error }));
   },
 
 };

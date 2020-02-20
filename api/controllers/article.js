@@ -1,7 +1,20 @@
+/* eslint-disable consistent-return */
+const { body, validationResult } = require('express-validator');
 const { pool } = require('../db/config');
 
 module.exports = {
+  articleInputValidation: [
+    body('title', 'Title field cannot be empty').trim()
+      .not().isEmpty(),
+    body('article', 'Article cannot be empty').trim()
+      .not()
+      .isEmpty(),
+  ],
   createArticle(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
     const { title, article } = req.body;
     const authorId = req.user.id;
     const newArticle = {
@@ -10,11 +23,11 @@ module.exports = {
       values: [title, article, authorId],
     };
 
-    pool.query(newArticle).then((response) => {
+    return pool.query(newArticle).then((response) => {
       const { rows } = response;
       const { id } = rows[0];
       const createdOn = new Date(rows[0].created_at);
-      res.status(201).json({
+      return res.status(201).json({
         message: 'Article successfully posted',
         articleId: id,
         createdOn,
@@ -26,6 +39,10 @@ module.exports = {
       });
   },
   editArticle(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
     const { title, article } = req.body;
     const { articleId } = req.params;
     const { isAdmin, id: signedInUser } = req.user;
@@ -56,23 +73,19 @@ module.exports = {
       return pool.query(updateArticle)
         .then((response) => {
           const { rows: row } = response;
-          res.status(201).json({
+          return res.status(201).json({
             message: 'Article successfully updated',
             title: row[0].title,
             article: row[0].article,
           });
         })
-        .catch((error) => {
-          res.status(400).json({
-            error,
-          });
-        });
-    })
-      .catch((error) => {
-        res.status(500).json({
+        .catch((error) => res.status(400).json({
           error,
-        });
-      });
+        }));
+    })
+      .catch((error) => res.status(500).json({
+        error,
+      }));
   },
   deleteArticle(req, res) {
     const { articleId } = req.params;
