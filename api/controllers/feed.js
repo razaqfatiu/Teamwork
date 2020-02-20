@@ -9,8 +9,9 @@ module.exports = {
       SELECT id, created_at as "createdOn", title, NULL as article, image_url as "url", author_id as "authorId" FROM gif ORDER BY "createdOn" ASC`,
     };
     pool.query(getFeed).then((result) => {
-      res.status(200).json({ data: result.rows });
+      if (result.rows.length < 1) return res.status(404).json({ error: 'Not Found' });
+      return res.status(200).json({ data: result.rows });
     })
-      .catch((error) => { res.status(400).json({ error }); });
+      .catch((error) => { res.status(500).json({ error }); });
   },
 };

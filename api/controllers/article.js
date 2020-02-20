@@ -22,7 +22,7 @@ module.exports = {
       });
     })
       .catch((error) => {
-        res.status(400).json({ error });
+        res.status(500).json({ error });
       });
   },
   editArticle(req, res) {
@@ -69,7 +69,7 @@ module.exports = {
         });
     })
       .catch((error) => {
-        res.status(400).json({
+        res.status(500).json({
           error,
         });
       });
@@ -86,7 +86,7 @@ module.exports = {
     pool.query(getArticleInfo).then((data) => {
       const { rows } = data;
       const author = rows[0].author_id;
-
+      if (rows.length < 1) return res.status(404).json({ error: 'Not Found' });
       if (!isAdmin && author !== signedInUser) {
         return res.status(401).json({
           message: 'You are not authorized to delete this article',
@@ -104,7 +104,7 @@ module.exports = {
           res.status(400).json({ error });
         });
     })
-      .catch((error) => { res.status(400).json({ error }); });
+      .catch((error) => { res.status(500).json({ error }); });
   },
   getOneArticle(req, res) {
     const { articleId } = req.params;
@@ -121,7 +121,9 @@ module.exports = {
     };
     pool.query(selectComment).then((response) => pool.query(selectArticle).then((result) => {
       const { rows } = result;
-      res.status(200).json({
+      if (rows.length < 1) return res.status(404).json({ error: 'Not Found' });
+
+      return res.status(200).json({
         id: rows[0].id,
         createdOn: rows[0].created_at,
         title: rows[0].title,
@@ -130,6 +132,6 @@ module.exports = {
       });
     })
       .catch((error) => res.status(400).json({ error })))
-      .catch((error) => res.status(400).json({ error }));
+      .catch((error) => res.status(500).json({ error }));
   },
 };
