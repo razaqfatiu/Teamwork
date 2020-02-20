@@ -7,7 +7,7 @@ post /auth/signin
 
 post /auth/create-user
 
-post /articles', userAuth
+post /articles
 
 patch /articles/:articleId
 
