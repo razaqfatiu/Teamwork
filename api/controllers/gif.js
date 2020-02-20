@@ -1,10 +1,23 @@
+const { body, validationResult } = require('express-validator');
 const cloudinary = require('../config/cloudinary');
 const { pool } = require('../db/config');
 
 module.exports = {
+  gifInputValidation: [
+    body('title', 'Title field cannot be empty').trim()
+      .not().isEmpty(),
+    body('image', 'gif image here').trim()
+      .not()
+      .isEmpty(),
+  ],
+  // eslint-disable-next-line consistent-return
   createGif(req, res) {
     const image = req.file.path;
     const { title } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
     const userId = req.user.id;
     cloudinary.uploader.upload(image,
       {
@@ -28,7 +41,7 @@ module.exports = {
           const { rows } = response;
           const createdOn = new Date(rows[0].created_at);
 
-          res.status(201).json({
+          return res.status(201).json({
             gifId: rows[0].id,
             message: 'GIF image successfully posted',
             createdOn,
@@ -36,11 +49,9 @@ module.exports = {
             imageUrl: rows[0].image_url,
           });
         })
-          .catch((error) => {
-            res.status(500).json({
-              error,
-            });
-          });
+          .catch((error) => res.status(500).json({
+            error,
+          }));
       });
   },
   deleteGif(req, res) {
