@@ -24,9 +24,9 @@ paths:
             schema:
               type: object
               properties:
-                firstName:
+                firstname:
                   type: string
-                lastName:
+                lastname:
                   type: string
                 email:
                   type: string
@@ -42,28 +42,16 @@ paths:
                   type: string
       responses:
         "201": # status code
-          description: User Account created Successfully
+          description: User signed up Successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
-                gender:
-                  type: string
-                jobrole:
-                  type: string
-                department:
-                  type: string
-                address:
-                  type: string
+                  message:
+                    type: string
+                  userId:
+                    type: integer
           "400":
             description: User account exists.
           "404":
@@ -141,9 +129,9 @@ paths:
                     type: string
                   imageUrl:
                     type: string
-          "500":
-            description: Server Error.
-  /gifs/{gifId}:  
+        "500":
+          description: Server Error.
+  /gifs/{gifId}:
     get:
       security:
         - bearerAuth: []
@@ -159,8 +147,8 @@ paths:
           description: Numeric ID of the gif image to get
       description: get Uploaded gif Image.
       responses:
-        "200": # status code
-          description: Gotten Gif image Successfully
+        "200":
+          description: Fetch gif image Successfully
           content:
             application/json:
               schema:
@@ -175,9 +163,11 @@ paths:
                   url:
                     type: string
                   comments:
-                    type: string
-      "400":
-        description: Bad request.
+                    type: array
+        "404":
+          description: Image not found.
+        "400":
+          description: Bad request
     delete:
       security:
         - bearerAuth: []
@@ -213,6 +203,13 @@ paths:
       tags:
         - Article
       summary: Update Article
+      parameters:
+        - in: path
+          name: articleId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the article to edit
       description: Admin and authorized users can update articles.
       requestBody:
         required: true
@@ -225,6 +222,27 @@ paths:
                   type: string
                 article:
                   type: string
+      responses:
+        "201": # status code
+          description: Article UpdatedE Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  articleId:
+                    type: integer
+                  createdOn:
+                    type: string
+                  title:
+                    type: string
+          "401":
+            description: Only Admins and authorized users can edit an article.
+          "400":
+            description: Bad request.
+
     delete:
       security:
         - bearerAuth: []
@@ -284,7 +302,7 @@ paths:
                   article:
                     type: string
                   comments:
-                    type: string
+                    type: array
       "400":
         description: Bad request.
   /articles:
@@ -308,7 +326,7 @@ paths:
                   type: string
       responses:
         "201": # status code
-          description: Admin Updated a product Successfully
+          description: Article posted Successfully
           content:
             application/json:
               schema:
@@ -325,7 +343,6 @@ paths:
           "400":
             description: Bad request.
 
-   
   /articles/{articleId}/comment:
     post:
       security:
@@ -340,7 +357,7 @@ paths:
             type: integer
           required: true
           description: Numeric ID of the article to comment on
-      description: Add Products to cart.
+      description: Add comment to an article.
       requestBody:
         required: true
         content:
@@ -352,7 +369,7 @@ paths:
                   type: string
       responses:
         "201": # status code
-          description: Comment created Successfully
+          description: Article posted Successfully
           content:
             application/json:
               schema:
@@ -368,15 +385,16 @@ paths:
                     type: string
                   comment:
                     type: string
-          "404":
+          "400":
             description: Bad request.
+
   /gifs/{gifId}/comment:
     post:
       security:
         - bearerAuth: []
       tags:
         - Comments
-      summary: Post comment on uploaded gif.
+      summary: comment on uploaded gif.
       parameters:
         - in: path
           name: gifId
@@ -396,7 +414,7 @@ paths:
                   type: string
       responses:
         "201": # status code
-          description: Comment created Successfully
+          description: Article posted Successfully
           content:
             application/json:
               schema:
@@ -406,13 +424,13 @@ paths:
                     type: string
                   createdOn:
                     type: string
-                  gifTitle:
+                  gitTitle:
                     type: string
                   comment:
                     type: string
-          "404":
+          "400":
             description: Bad request.
-  /feeds:
+  /feed:
     get:
       security:
         - bearerAuth: []
@@ -422,30 +440,23 @@ paths:
       description: get all uploaded article and gif images detail.
       responses:
         "200": # status code
-          description: User signed in Successfully
+          description: Gotten article Successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  status:
+                  id:
                     type: integer
-                  data:
+                  createdOn:
+                    type: string
+                  title:
+                    type: string
+                  article:
+                    type: string
+                  comments:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        cartId:
-                          type: integer
-                        productId:
-                          type: integer
-                        userId:
-                          type: integer
-                        createdAt:
-                          type: string
-                        updatedAt:
-                          type: string
-      "404":
+      "400":
         description: Bad request.
 components:
   securitySchemes:

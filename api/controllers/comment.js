@@ -34,7 +34,7 @@ module.exports = {
         });
     })
       .catch((error) => {
-        res.status(400).json({ error });
+        res.status(500).json({ error });
       });
   },
   createGifComment(req, res) {
@@ -69,7 +69,7 @@ module.exports = {
         });
     })
       .catch((error) => {
-        res.status(400).json({ error });
+        res.status(500).json({ error });
       });
   },
 };

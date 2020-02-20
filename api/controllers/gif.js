@@ -85,12 +85,12 @@ module.exports = {
             message: 'Gif post successfully deleted',
           }))
             .catch((error) => {
-              res.status(500).json({ error });
+              res.status(400).json({ error });
             });
         });
     })
       .catch((error) => {
-        res.status(400).json({ error });
+        res.status(500).json({ error });
       });
   },
   getOneGif(req, res) {
@@ -108,7 +108,8 @@ module.exports = {
 
     pool.query(selectGifComment).then((response) => pool.query(selectGif).then((result) => {
       const { rows } = result;
-      res.status(200).json({
+      if (rows.length < 1) return res.status(404).json({ error: 'Not Found' });
+      return res.status(200).json({
         id: rows[0].id,
         createdOn: rows[0].created_at,
         title: rows[0].title,
@@ -117,6 +118,6 @@ module.exports = {
       });
     })
       .catch((error) => res.status(400).json({ error })))
-      .catch((error) => res.status(400).json({ error }));
+      .catch((error) => res.status(500).json({ error }));
   },
 };

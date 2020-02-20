@@ -67,7 +67,7 @@ module.exports = {
       firstname, lastname, email, password, gender, jobrole, department, address,
     } = req.body;
     const userId = req.user.id;
-    const { token, isAdmin } = req.user;
+    const { isAdmin } = req.user;
     const checkIfuserExists = {
       name: 'checkIfNewuserExists',
       text: 'SELECT * FROM users WHERE email = $1',
@@ -97,7 +97,6 @@ module.exports = {
           .then(() => {
             res.status(201).json({
               message: 'User Account successfully created',
-              token,
               userId,
             });
           })
