@@ -30,7 +30,7 @@
     "nock": "^11.7.0"
   },
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "chai-http": "^4.3.0",
     "cloudinary": "^1.16.0",
